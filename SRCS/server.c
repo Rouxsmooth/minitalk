@@ -6,38 +6,65 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2024/12/22 11:05:28 by mzaian           ###   ########.fr       */
+/*   Updated: 2024/12/26 23:35:34 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-
-void	handle_sigusr1(int sig, t_server serv)
+t_server serv;
+/*
+void printmaskbin(unsigned int mask)
 {
-	if (serv.current_bit != 8)
+	int i;
+
+	i = 7;
+	ft_printf("Binary mask: ");
+	while (i >= 0)
 	{
-		(serv.bit_received << (8 - serv.current_bit)) & serv.bit_received;
+		ft_printf("%d", (mask >> i) & 1);
+		i--;
+	}
+	ft_printf("\n");
+}
+*/
+void handle_sigusr(int sig)
+{
+	int bit;
+
+	if (sig == SIGUSR1)
+		bit = 0;
+	else
+		bit = 1;
+	//bit = (sig == SIGUSR2);
+	ft_printf("Received bit: %d\n", bit);
+	if (serv.current_bit < 8)
+	{
+		serv.mask |= (bit << (7 - serv.current_bit));
 		serv.current_bit++;
 	}
-	else
-		while (serv.current_bit != 0)
-		{
-			write()
-		}
+	if (serv.current_bit == 8)
+	{
+		ft_printf("Character received: %c\n", serv.mask);
+		serv.current_bit = 0;
+		serv.mask = 0;
+	}
+	//printmaskbin(serv.mask);
 }
 
-void	handle_sigusr2(int sig, t_server serv)
+int init_server(void)
 {
-	
-}
+	struct sigaction sa;
 
-int	init_server(void)
-{
-	t_server	serv;
-
-	return ((signal(SIGUSR1, handle_sigusr1), signal(SIGUSR2, handle_sigusr2)),
-	ft_printf("\e[31;1m\n\
+	serv.current_bit = 0;
+	serv.mask = 0;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = handle_sigusr;
+	if (sigaction(SIGUSR1, &sa, NULL) == -1
+		|| sigaction(SIGUSR2, &sa, NULL) == -1)
+		return (ft_printf("Failed to set up signal handlers.\n"), -1);
+	return (ft_printf("\e[31;1m\n\
    +---------------------------------------------+\n\
    | __  __ ___ _   _ ___ _____  _    _     _  __|\n\
    ||  \\/  |_ _| \\ | |_ _|_   _|/ \\  | |   | |/ /|\n\
@@ -52,7 +79,8 @@ int	init_server(void)
 
 int main(void)
 {
-	init_server(); //this just retrieves program's PID
+	if (init_server() == -1)
+		return (display_error("Error: signal assignation error."), 1);
 	while (1)
 		pause();
 	return (0);
