@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2024/12/26 23:35:34 by mzaian           ###   ########.fr       */
+/*   Updated: 2024/12/31 15:07:46 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,8 @@ void handle_sigusr(int sig)
 {
 	int bit;
 
-	if (sig == SIGUSR1)
-		bit = 0;
-	else
-		bit = 1;
-	//bit = (sig == SIGUSR2);
-	ft_printf("Received bit: %d\n", bit);
+	bit = (sig == SIGUSR2);
+	//ft_printf("Received bit: %d\n", bit);
 	if (serv.current_bit < 8)
 	{
 		serv.mask |= (bit << (7 - serv.current_bit));
@@ -45,7 +41,7 @@ void handle_sigusr(int sig)
 	}
 	if (serv.current_bit == 8)
 	{
-		ft_printf("Character received: %c\n", serv.mask);
+		ft_printf("%c", serv.mask);
 		serv.current_bit = 0;
 		serv.mask = 0;
 	}

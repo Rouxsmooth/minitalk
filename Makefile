@@ -3,10 +3,10 @@ LIBNAME = $(NAME).a
 LIBFT_DIR = ../libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFILES = SRCS/server.c 
-BONUSFILES = server_bonus.c bonus.c
+CFILES = SRCS/server.c SRCS/client.c
+#BONUSFILES = server_bonus.c client_bonus.c
 OFILES = $(CFILES:.c=.o)
-OBONUSFILES = $(BONUSFILES:.c=.o)
+#OBONUSFILES = $(BONUSFILES:.c=.o)
 
 CFLAGS = -Wall -Werror -Wextra -L $(LIBFT_DIR) -l:$(LIBFT)
 
@@ -46,3 +46,9 @@ norm:
 allc: $(LIBNAME) clean
 
 rec: fclean allc
+
+rerunserver : rec
+	@cc $(CFLAGS) SRCS/server.c -o server && ./server
+
+rerunclient : rec
+	@cc $(CFLAGS) SRCS/client.c -o client && ./client
