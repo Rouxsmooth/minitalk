@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2024/12/25 17:18:51 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/07 03:36:37 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 //add libft to INCLUDES and change libft.h path
 # include "../../libft/INCLUDES/libft.h"
 # include "../../../../usr/include/x86_64-linux-gnu/bits/sigaction.h"
+
 typedef struct s_server
 {
 	unsigned int	current_bit;

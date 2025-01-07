@@ -8,7 +8,7 @@ CFILES = SRCS/server.c SRCS/client.c
 OFILES = $(CFILES:.c=.o)
 #OBONUSFILES = $(BONUSFILES:.c=.o)
 
-CFLAGS = -Wall -Werror -Wextra -L $(LIBFT_DIR) -l:$(LIBFT)
+CFLAGS = -Wall -Werror -Wextra
 
 $(LIBNAME): $(LIBFT) $(OFILES)
 	@cp $(LIBFT) $(LIBNAME)
@@ -16,7 +16,7 @@ $(LIBNAME): $(LIBFT) $(OFILES)
 	@ar -rc $(LIBNAME) $(OFILES) $(LIBFT)
 
 %.o: %.c 
-	@cc $(CFLAGS) -c $< -o $@
+	@cc $(CFLAGS) -L $(LIBFT_DIR) -l:$(LIBFT) -c $< -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
@@ -48,7 +48,7 @@ allc: $(LIBNAME) clean
 rec: fclean allc
 
 rerunserver : rec
-	@cc $(CFLAGS) SRCS/server.c -o server && ./server
+	@cc $(CFLAGS) SRCS/server.c -L $(LIBFT_DIR) -l:$(LIBFT) -o server && ./server
 
 rerunclient : rec
-	@cc $(CFLAGS) SRCS/client.c -o client && ./client
+	@cc $(CFLAGS) SRCS/client.c -L $(LIBFT_DIR) -l:$(LIBFT) -o client && ./client

@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2024/12/31 15:46:37 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/07 03:49:44 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ float get_usleep(size_t messlen)
 	//int upperbound;
 
 	if (messlen < 100)
-		return (300);
+		return (500);
 	//lowerbound = get_lower_bound(messlen, 10);
 	//upperbound = get_upper_bound(messlen, 10);
 	//if (messlen - lowerbound < upperbound - messlen)
