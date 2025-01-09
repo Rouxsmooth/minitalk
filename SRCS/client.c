@@ -6,20 +6,20 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/07 03:49:44 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/09 10:18:24 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-float get_usleep(size_t messlen)
+/*int get_usleep(size_t messlen)
 {
 	//float divisor;
 	//int lowerbound;
 	//int upperbound;
 
-	if (messlen < 100)
-		return (500);
+	//if (messlen < 125)
+	//	return (500);
 	//lowerbound = get_lower_bound(messlen, 10);
 	//upperbound = get_upper_bound(messlen, 10);
 	//if (messlen - lowerbound < upperbound - messlen)
@@ -27,23 +27,26 @@ float get_usleep(size_t messlen)
 	//else
 	//	divisor = 2 * upperbound;
 	return (4 * messlen);
-}
+}*/
 
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
 	int		i;
-	float	usleep_time;
+	//int		usleep_time;
+	size_t	messlen;
 
 	i = 8;
 	if (argc != 3)
-		return (display_error(ft_ternary("Error: missing server PID or message",
-			"Error: too much arguments", argc < 3)));
+		return (display_error(ft_ternary("input should be \
+./client <PID> <MESSAGE>", "too much arguments", argc < 3)));
 	pid = ft_atoi(argv[1]);
 	if (pid < 1)
-		return (display_error("Error: invalid server PID"));
-	usleep_time = get_usleep(ft_strlen(argv[2]));
-	ft_printf("usleep time = %d pour messlen de %d\n", (int) usleep_time, (int) ft_strlen(argv[2]));
+		return (display_error("invalid server PID"));
+	//usleep_time = get_usleep(ft_strlen(argv[2]));
+	messlen = ft_strlen(argv[2]);
+	#include <stdio.h>
+	//printf("usleep time = %f pour messlen de %d\n", (double) (3.5 * messlen), (int) messlen);
 	while (*argv[2])
 	{
 		//ft_printf("binletter : ");
@@ -52,18 +55,18 @@ int	main(int argc, char **argv)
 		{
 			//ft_printf("h bit would be: %d\n", (104 >> i) & 1);
 			//ft_printf("%d", (*argv[2] >> i) & 1);
-			if ((*argv[2] >> i ) & 1)
+			if ((*argv[2] >> i) & 1)
 			{
 				if (kill(pid, SIGUSR2) == -1)
-					return (display_error("Error: message sending error"));
+					return (display_error("message sending error"));
 			}
 			else
 			{
 				if (kill(pid, SIGUSR1) == -1)
-					return (display_error("Error: message sending error"));
+					return (display_error("message sending error"));
 			}
 			i--;
-			usleep(usleep_time);
+			usleep(4 * messlen);
 		}
 		//ft_printf("\n");
 		argv[2]++;

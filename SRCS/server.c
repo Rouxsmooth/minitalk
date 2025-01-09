@@ -6,13 +6,13 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/07 03:37:56 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/09 09:50:47 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-t_server serv;
+t_server g_serv;
 /*
 void printmaskbin(unsigned int mask)
 {
@@ -34,26 +34,26 @@ void handle_sigusr(int sig)
 
 	bit = (sig == SIGUSR2);
 	//ft_printf("Received bit: %d\n", bit);
-	if (serv.current_bit < 8)
+	if (g_serv.current_bit < 8)
 	{
-		serv.mask |= (bit << (7 - serv.current_bit));
-		serv.current_bit++;
+		g_serv.mask |= (bit << (7 - g_serv.current_bit));
+		g_serv.current_bit++;
 	}
-	if (serv.current_bit == 8)
+	if (g_serv.current_bit == 8)
 	{
-		ft_printf("%c", serv.mask);
-		serv.current_bit = 0;
-		serv.mask = 0;
+		ft_printf("%c", g_serv.mask);
+		g_serv.current_bit = 0;
+		g_serv.mask = 0;
 	}
-	//printmaskbin(serv.mask);
+	//printmaskbin(g_serv.mask);
 }
 
 int init_server(void)
 {
 	struct sigaction sa;
 
-	serv.current_bit = 0;
-	serv.mask = 0;
+	g_serv.current_bit = 0;
+	g_serv.mask = 0;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sa.sa_handler = handle_sigusr;

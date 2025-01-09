@@ -8,15 +8,15 @@ CFILES = SRCS/server.c SRCS/client.c
 OFILES = $(CFILES:.c=.o)
 #OBONUSFILES = $(BONUSFILES:.c=.o)
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra  -L $(LIBFT_DIR) -l:$(LIBFT)
 
 $(LIBNAME): $(LIBFT) $(OFILES)
 	@cp $(LIBFT) $(LIBNAME)
 	@echo "All $(NAME) files compiled.\n"
-	@ar -rc $(LIBNAME) $(OFILES) $(LIBFT)
+	@ar -rc $(LIBNAME) $(OFILES) $(LIBFT) 
 
 %.o: %.c 
-	@cc $(CFLAGS) -L $(LIBFT_DIR) -l:$(LIBFT) -c $< -o $@
+	@cc $(CFLAGS)  -c $< -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
@@ -48,7 +48,7 @@ allc: $(LIBNAME) clean
 rec: fclean allc
 
 rerunserver : rec
-	@cc $(CFLAGS) SRCS/server.c -L $(LIBFT_DIR) -l:$(LIBFT) -o server && ./server
+	@cc $(CFLAGS) SRCS/server.c -o server && ./server
 
 rerunclient : rec
-	@cc $(CFLAGS) SRCS/client.c -L $(LIBFT_DIR) -l:$(LIBFT) -o client && ./client
+	@cc $(CFLAGS) SRCS/client.c -o client && ./client
