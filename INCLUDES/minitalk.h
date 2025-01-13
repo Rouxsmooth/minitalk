@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/13 10:58:00 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/13 18:37:05 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,22 @@
 # include "../../libft/INCLUDES/libft.h"
 # include "../../../../usr/include/x86_64-linux-gnu/bits/sigaction.h"
 
-typedef struct s_server
+typedef struct	s_server
 {
 	unsigned int	current_bit;
 	unsigned char	mask;
 	char			*msg;
 	size_t			msglen;
-} t_server;
+	int				keep;
+	int				amountlen;
+}	t_server;
+
+typedef struct	s_client
+{
+	unsigned int	ack;
+	int				sent;
+	int				amount_sent;
+	pid_t			pid;
+}	t_client;
 
 #endif

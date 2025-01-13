@@ -6,70 +6,99 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/13 10:34:44 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/13 18:28:44 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-/*int get_usleep(size_t messlen)
-{
-	//float divisor;
-	//int lowerbound;
-	//int upperbound;
+t_client	g_client;
+#include <stdio.h>
 
-	//if (messlen < 125)
-	//	return (500);
-	//lowerbound = get_lower_bound(messlen, 10);
-	//upperbound = get_upper_bound(messlen, 10);
-	//if (messlen - lowerbound < upperbound - messlen)
-	//	divisor = 5 * lowerbound - 20;
-	//else
-	//	divisor = 2 * upperbound;
-	return (4 * messlen);
-}*/
+void	unacknowledged(void)
+{
+	return (start_colored_output(1, colorcode_by_str("magenta")),
+			ft_printf("Bit reception went wrong, retrying...\n"),
+			close_colored_output(1));
+}
+
+void	handle_ack(int sig)
+{
+	g_client.ack = sig;
+}
+
+void	sig_sending(int sig)
+{
+	int	i;
+
+	i = 0;
+	if (kill(g_client.pid, (sig * 2) + 10) == -1)
+	{
+		display_error("Message sending error!");
+		return ;
+	}
+	usleep(1);
+	while (!g_client.ack)
+	{
+		if (i > 500)
+			return ;
+		usleep(1000);
+		i++;
+		// printf("got to 500? %d\n", i);
+	}
+	return ;
+}
+
+void	char_sending(char c)
+{
+	unsigned int	i;
+
+	i = 8;
+	while (--i)
+		sig_sending((c >> i) & 1);
+	return ;
+}
+
+void	msg_sending(char *msg)
+{
+	while (*msg)
+	{
+		char_sending(*msg);
+		msg++;
+		g_client.amount_sent++;
+	}
+	return ;
+}
+
+void	signature_sending(void)
+{
+	char	*signature;
+
+	signature = ft_itoa(g_client.amount_sent);
+	msg_sending("*@");
+	msg_sending(signature);
+	msg_sending("@*");
+	// add a way to receive signature confirmation
+	return (free(signature));
+}
 
 int	main(int argc, char **argv)
 {
-	pid_t	pid;
-	int		i;
-	//int		usleep_time;
-	size_t	messlen;
+	struct sigaction sa;
 
-	i = 8;
+	sa.sa_handler = handle_ack;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	g_client.amount_sent = 0;
+	if (sigaction(SIGUSR1, &sa, NULL) == -1
+		|| sigaction(SIGUSR2, &sa, NULL) == -1)
+		return (display_error("failed to set up signal handlers"));
 	if (argc != 3)
 		return (display_error(ft_ternary("input should be \
 ./client <PID> <MESSAGE>", "too much arguments", argc < 3)));
-	pid = ft_atoi(argv[1]);
-	if (pid < 1)
+	g_client.pid = ft_atoi(argv[2]);
+	if (g_client.pid < 1)
 		return (display_error("invalid server PID"));
-	//usleep_time = get_usleep(ft_strlen(argv[2]));
-	messlen = ft_strlen(argv[2]);
-	#include <stdio.h>
-	//printf("usleep time = %f pour messlen de %d\n", (double) (3.5 * messlen), (int) messlen);
-	while (*argv[2])
-	{
-		//ft_printf("binletter : ");
-		i = 7;
-		while (i >= 0)
-		{
-			//ft_printf("h bit would be: %d\n", (104 >> i) & 1);
-			//ft_printf("%d", (*argv[2] >> i) & 1);
-			if ((*argv[2] >> i) & 1)
-			{
-				if (kill(pid, SIGUSR2) == -1)
-					return (display_error("message sending error"));
-			}
-			else
-			{
-				if (kill(pid, SIGUSR1) == -1)
-					return (display_error("message sending error"));
-			}
-			i--;
-			usleep(10 * messlen);
-		}
-		//ft_printf("\n");
-		argv[2]++;
-	}
+	msg_sending(argv[1]);
 	return (0);
 }
