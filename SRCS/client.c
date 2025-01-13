@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/09 10:18:24 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/13 10:34:44 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int argc, char **argv)
 					return (display_error("message sending error"));
 			}
 			i--;
-			usleep(4 * messlen);
+			usleep(10 * messlen);
 		}
 		//ft_printf("\n");
 		argv[2]++;

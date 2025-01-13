@@ -6,13 +6,14 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/09 09:50:47 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/13 11:07:01 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-t_server g_serv;
+#include <stdio.h>
+static t_server g_serv;
 /*
 void printmaskbin(unsigned int mask)
 {
@@ -30,8 +31,7 @@ void printmaskbin(unsigned int mask)
 */
 void handle_sigusr(int sig)
 {
-	int bit;
-
+	int 	bit;
 	bit = (sig == SIGUSR2);
 	//ft_printf("Received bit: %d\n", bit);
 	if (g_serv.current_bit < 8)
@@ -41,11 +41,30 @@ void handle_sigusr(int sig)
 	}
 	if (g_serv.current_bit == 8)
 	{
-		ft_printf("%c", g_serv.mask);
+		if (g_serv.msglen == 0)
+			g_serv.msg[0] = g_serv.mask;
+		else
+		{
+			g_serv.msg = (char *) ft_realloc(g_serv.msg, g_serv.msglen + 1);
+			g_serv.msg[g_serv.msglen] = g_serv.mask;
+		}
+		printf("mask: %c | full msg: \"%s\" | msglen: %d | supposedlen: %d\n", g_serv.mask, g_serv.msg, (int) g_serv.msglen, (int) ft_strlen(g_serv.msg));
+		g_serv.msglen++;
 		g_serv.current_bit = 0;
 		g_serv.mask = 0;
 	}
 	//printmaskbin(g_serv.mask);
+}
+
+int	reception_ack(siginfo_t *info, int sig)
+{
+	pid_t	sendingpid;
+	int		i;
+
+	sendingpid = info->si_pid;
+	if (kill(sendingpid, sig) == -1)
+		return (display_error("message sending error"));
+	
 }
 
 int init_server(void)
@@ -54,6 +73,8 @@ int init_server(void)
 
 	g_serv.current_bit = 0;
 	g_serv.mask = 0;
+	g_serv.msglen = 0;
+	g_serv.msg = ft_calloc(1, sizeof(char));
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sa.sa_handler = handle_sigusr;
