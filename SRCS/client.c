@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/14 17:41:39 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/15 11:05:30 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void printmaskbin(unsigned int mask)
 	int i;
 
 	i = 7;
-	ft_printf("Binary mask: ");
+	printf("Binary mask: ");
 	while (i >= 0)
 	{
-		ft_printf("%d", (mask >> i) & 1);
+		printf("%d", (mask >> i) & 1);
 		i--;
 	}
-	ft_printf("\n");
+	printf("\n");
 }
 
 void	unacknowledged(void)
@@ -41,48 +41,55 @@ void	handle_ack(int sig)
 	g_client.ack = sig;
 }
 
-void	sig_sending(int sig)
+int	sig_sending(int sig)
 {
 	int	i;
 
 	i = 0;
+	g_client.ack = 0;
 	if (kill(g_client.pid, (sig * 2) + 10) == -1)
-	{
-		display_error("Message sending error!");
-		return ;
-	}
+		return (display_error("wrong pid"));
 	usleep(1);
 	while (!g_client.ack)
 	{
 		if (i > 500)
-			return ;
-		usleep(1000);
+			return (-1);
+		usleep(1);
 		i++;
-		// printf("got to 500? %d\n", i);
+		//printf("got to 500? %d\n", i);
 	}
-	return ;
+	g_client.receivedback++;
+	return (0);
 }
 
-void	char_sending(char c)
+int	char_sending(char c)
 {
 	unsigned int	i;
+	unsigned int	sent;
 
 	i = 8;
-	while (--i)
-		sig_sending((c >> i) & 1);
+	while (i--)
+	{
+		sent = sig_sending((c >> i) & 1);
+		if (sent == 1)
+			return (1);
+		if (sent == -1)
+			i++;
+	}
 	printmaskbin((unsigned int) c);
-	return ;
+	return (0);
 }
 
-void	msg_sending(char *msg)
+int	msg_sending(char *msg)
 {
 	while (*msg)
 	{
-		char_sending(*msg);
+		if (char_sending(*msg) == 1)
+			return (1);
 		msg++;
 		g_client.amount_sent++;
 	}
-	return ;
+	return (0);
 }
 
 void	signature_sending(void)
@@ -105,6 +112,7 @@ int	main(int argc, char **argv)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	g_client.amount_sent = 0;
+	g_client.receivedback = 0;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 		return (display_error("failed to set up signal handlers"));
@@ -114,6 +122,8 @@ int	main(int argc, char **argv)
 	g_client.pid = ft_atoi(argv[2]);
 	if (g_client.pid < 1)
 		return (display_error("invalid server PID"));
-	msg_sending(argv[1]);
+	if (msg_sending(argv[1]) == 1)
+		return (1);
+	signature_sending();
 	return (0);
 }

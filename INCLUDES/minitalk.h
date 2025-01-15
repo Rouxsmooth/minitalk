@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/13 18:37:05 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/15 10:56:22 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ typedef struct	s_server
 	size_t			msglen;
 	int				keep;
 	int				amountlen;
+	int				sigcount;
+	int				sentback;
 }	t_server;
 
 typedef struct	s_client
 {
 	unsigned int	ack;
-	int				sent;
 	int				amount_sent;
+	int				receivedback;
 	pid_t			pid;
 }	t_client;
 

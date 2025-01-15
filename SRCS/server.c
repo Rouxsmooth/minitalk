@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/14 18:08:28 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/15 11:37:07 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,23 @@ int	reception_ack(pid_t sender_pid, int sig)
 	// printf("sent to %d\n", sender_pid);
 	if (kill(sender_pid, sig) == -1)
 		return (display_error("bit sending error"));
+	g_serv.sentback++;
 	return (0);
 }
 
-// void printmaskbin(unsigned int mask)
-// {
-// 	int i;
+ void printmaskbin(unsigned int mask)
+ {
+ 	int i;
 
-// 	i = 7;
-// 	ft_printf("Binary mask: ");
-// 	while (i >= 0)
-// 	{
-// 		ft_printf("%d", (mask >> i) & 1);
-// 		i--;
-// 	}
-// 	ft_printf("\n");
-// }
+ 	i = 7;
+ 	printf("Binary mask: ");
+ 	while (i >= 0)
+ 	{
+ 		printf("%d", (mask >> i) & 1);
+ 		i--;
+ 	}
+ 	printf("\n");
+ }
 
 int	check_signature(pid_t sender_pid)
 {
@@ -44,11 +45,13 @@ int	check_signature(pid_t sender_pid)
 
 	i = g_serv.msglen - 3;
 	nbr = 0;
-	if (g_serv.mask = '*' && g_serv.msg[g_serv.msglen - 2] == '@')
+	if ((g_serv.mask = '*') && (g_serv.msg[g_serv.msglen - 2] == '@'))
 	{
 		while (ft_isdigit(g_serv.msg[i]))
 			i--;
-		if (g_serv.msg[i] == '@' && g_serv.msg[i - 1] == '*')
+		printf("at i %c, at i -1 %c, at i + 1 %c\n", g_serv.msg[i], g_serv.msg[i - 1], g_serv.msg[i + 1]);
+		i++;
+		if ((g_serv.msg[i] == '@') && (g_serv.msg[i - 1] == '*'))
 		{
 			while (ft_isdigit(g_serv.msg[++i]))
 				nbr = (nbr * 10) + (g_serv.msg[i] - 48);
@@ -70,9 +73,10 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 	
 	sender_pid = info->si_pid;
 	bit = (sig == SIGUSR2);
-	printf("%d\n", bit);
-	// ft_printf("Received bit: %d\n", bit);
+	g_serv.sigcount++;
 	reception_ack(sender_pid, sig);
+	//printf("%d %d\n", g_serv.sigcount, g_serv.sentback);
+	//printf("%d\n", bit);
 	if (g_serv.current_bit < 8)
 	{
 		g_serv.mask |= (bit << (7 - g_serv.current_bit));
@@ -80,7 +84,7 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 	}
 	if (g_serv.current_bit == 8)
 	{
-		// printmaskbin(g_serv.mask);
+		//printmaskbin(g_serv.mask);
 		if (g_serv.msglen == 0)
 			g_serv.msg[0] = g_serv.mask;
 		else
@@ -90,26 +94,37 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 			if (check_signature(sender_pid))
 				g_serv.keep = 1;
 		}
-		printf("end? '%c'\n", g_serv.msg[g_serv.msglen]);
+		//printf("\n");
+		//printf("mask: %c | full msg: \"%s\" | msglen: %d | actuallen: %d\n", g_serv.mask, g_serv.msg, (int) g_serv.msglen, (int) ft_strlen(g_serv.msg));
 		g_serv.msglen++;
-		// printf("mask: %c | full msg: \"%s\" | msglen: %d | actuallen: %d\n", g_serv.mask, g_serv.msg, (int) g_serv.msglen, (int) ft_strlen(g_serv.msg));
 		g_serv.current_bit = 0;
 		g_serv.mask = 0;
 	}
 	if (g_serv.keep)
+	{
+		g_serv.keep = 0;
 		write(1, g_serv.msg, g_serv.msglen - 4 - g_serv.amountlen);
+		write(1, "\n", 1);
+	}
+}
+
+void	init_g_serv(void)
+{
+	g_serv.current_bit = 0;
+	g_serv.mask = 0;
+	g_serv.msglen = 0;
+	g_serv.keep = 0;
+	g_serv.amountlen = 0;
+	g_serv.sigcount = 0;
+	g_serv.sentback = 0;
+	g_serv.msg = ft_calloc(1, sizeof(char));
 }
 
 int init_server(void)
 {
 	struct sigaction sa;
 
-	g_serv.current_bit = 0;
-	g_serv.mask = 0;
-	g_serv.msglen = 0;
-	g_serv.keep = 0;
-	g_serv.amountlen = 0;
-	g_serv.msg = ft_calloc(1, sizeof(char));
+	init_g_serv();
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handle_sigusr;
