@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/13 18:28:44 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/14 17:41:39 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,20 @@
 
 t_client	g_client;
 #include <stdio.h>
+
+void printmaskbin(unsigned int mask)
+{
+	int i;
+
+	i = 7;
+	ft_printf("Binary mask: ");
+	while (i >= 0)
+	{
+		ft_printf("%d", (mask >> i) & 1);
+		i--;
+	}
+	ft_printf("\n");
+}
 
 void	unacknowledged(void)
 {
@@ -56,6 +70,7 @@ void	char_sending(char c)
 	i = 8;
 	while (--i)
 		sig_sending((c >> i) & 1);
+	printmaskbin((unsigned int) c);
 	return ;
 }
 

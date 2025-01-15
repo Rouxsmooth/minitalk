@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/13 18:38:02 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/14 18:08:28 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 			if (check_signature(sender_pid))
 				g_serv.keep = 1;
 		}
+		printf("end? '%c'\n", g_serv.msg[g_serv.msglen]);
 		g_serv.msglen++;
 		// printf("mask: %c | full msg: \"%s\" | msglen: %d | actuallen: %d\n", g_serv.mask, g_serv.msg, (int) g_serv.msglen, (int) ft_strlen(g_serv.msg));
 		g_serv.current_bit = 0;
@@ -132,7 +133,7 @@ int main(void)
 {
 	if (init_server() == -1)
 		return (1);
-	while (g_serv.keep)
+	while (1)
 		pause();
 	return (0);
 }
