@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/15 11:05:30 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/01/18 22:01:11 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,26 @@ void printmaskbin(unsigned int mask)
 	printf("\n");
 }
 
-void	unacknowledged(void)
+void	receive_signature(int bit)
 {
-	return (start_colored_output(1, colorcode_by_str("magenta")),
-			ft_printf("Bit reception went wrong, retrying...\n"),
-			close_colored_output(1));
+	if (g_client.current_bit < 8)
+	{
+		g_client.mask |= (bit << (7 - g_client.current_bit));
+		g_client.current_bit++;
+	}
+	if (g_client.current_bit == 8)
+	{
+		if (g_client.mask == g_client.amount_sent)
+			g_client.good_signature = 1;
+	}
+	return ;
 }
 
 void	handle_ack(int sig)
 {
 	g_client.ack = sig;
+	if (g_client.receive_sig == 1)
+		receive_signature((sig == SIGUSR2));
 }
 
 int	sig_sending(int sig)
@@ -56,16 +66,14 @@ int	sig_sending(int sig)
 			return (-1);
 		usleep(1);
 		i++;
-		//printf("got to 500? %d\n", i);
 	}
-	g_client.receivedback++;
 	return (0);
 }
 
 int	char_sending(char c)
 {
 	unsigned int	i;
-	unsigned int	sent;
+	int				sent;
 
 	i = 8;
 	while (i--)
@@ -76,7 +84,6 @@ int	char_sending(char c)
 		if (sent == -1)
 			i++;
 	}
-	printmaskbin((unsigned int) c);
 	return (0);
 }
 
@@ -100,19 +107,21 @@ void	signature_sending(void)
 	msg_sending("*@");
 	msg_sending(signature);
 	msg_sending("@*");
+	g_client.receive_sig = 1;
 	// add a way to receive signature confirmation
 	return (free(signature));
 }
 
 int	main(int argc, char **argv)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_handler = handle_ack;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	g_client.amount_sent = 0;
-	g_client.receivedback = 0;
+	g_client.receive_sig = 0;
+	g_client.good_signature = 0;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 		return (display_error("failed to set up signal handlers"));
@@ -122,8 +131,10 @@ int	main(int argc, char **argv)
 	g_client.pid = ft_atoi(argv[2]);
 	if (g_client.pid < 1)
 		return (display_error("invalid server PID"));
-	if (msg_sending(argv[1]) == 1)
-		return (1);
-	signature_sending();
+	while (!g_client.good_signature)
+	{
+		if (msg_sending(argv[1]) == 1)
+			return (1);
+	}
 	return (0);
 }
