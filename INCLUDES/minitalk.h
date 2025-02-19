@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/01/18 21:58:36 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/02/19 11:09:34 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,38 @@
 # include "../../libft/INCLUDES/libft.h"
 # include "../../../../usr/include/x86_64-linux-gnu/bits/sigaction.h"
 
-typedef struct	s_server
+typedef struct s_server
 {
 	unsigned int	current_bit;
 	unsigned char	mask;
 	char			*msg;
 	size_t			msglen;
-	int				keep;
-	int				amountlen;
-	int				good_signature;
-	int				waiting_sig_confirm;
+	int				maxbits;
+	int				bitcount;
+	int				has_signature;
 	int				sigcount;
-	int				sentback;
+	int				len;
 }	t_server;
 
-typedef struct	s_client
+typedef struct s_client
 {
 	unsigned int	current_bit;
 	unsigned char	mask;
 	unsigned int	ack;
 	int				amount_sent;
 	int				receive_sig;
-	int				good_signature;
 	pid_t			pid;
+	unsigned int	msglen;
 }	t_client;
 
-int	reception_ack(pid_t pid, int sig);
-int	sig_sending(int sig);
-int	char_sending(char c);
+extern t_server	g_serv;
+extern t_client	g_client;
 
+int		reception_ack(pid_t pid, int sig);
+int		sig_sending(int sig);
+int		char_sending(char c);
+int		msg_sending(char *msg);
+void	init_g_serv(void);
+void	get_signature(void);
 
 #endif

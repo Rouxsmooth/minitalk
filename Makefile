@@ -3,12 +3,10 @@ LIBNAME = $(NAME).a
 LIBFT_DIR = ../libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFILES = SRCS/server.c SRCS/client.c
-#BONUSFILES = server_bonus.c client_bonus.c
+CFILES = SRCS/globals.c SRCS/server.c SRCS/client.c SRCS/client_utils.c SRCS/server_utils.c
 OFILES = $(CFILES:.c=.o)
-#OBONUSFILES = $(BONUSFILES:.c=.o)
-
-CFLAGS = -Wall -Werror -Wextra  -L $(LIBFT_DIR) -l:$(LIBFT)
+INCLUDE_LIBFT = -L $(LIBFT_DIR) -l:$(LIBFT)
+CFLAGS = -Wall -Werror -Wextra  
 
 $(LIBNAME): $(LIBFT) $(OFILES)
 	@cp $(LIBFT) $(LIBNAME)
@@ -47,8 +45,6 @@ allc: $(LIBNAME) clean
 
 rec: fclean allc
 
-rerunserver : rec
-	@cc $(CFLAGS) SRCS/server.c -o server && ./server
-
-rerunclient : rec
-	@cc $(CFLAGS) SRCS/client.c -o client && ./client
+rerun : rec
+	@cc $(CFLAGS) SRCS/server.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o server 
+	@cc $(CFLAGS) SRCS/client.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o client 
