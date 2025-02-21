@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/02/19 11:14:41 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/02/21 16:38:16 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 		g_serv.mask = 0;
 	}
 	if (g_serv.sigcount == g_serv.maxbits)
-		return (ft_printf("%s\n", g_serv.msg), usleep(10), init_g_serv());
+		return (ft_printf("%s\n", g_serv.msg), init_g_serv());
 }
 
 int	init_server(void)

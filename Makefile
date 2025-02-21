@@ -6,7 +6,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CFILES = SRCS/globals.c SRCS/server.c SRCS/client.c SRCS/client_utils.c SRCS/server_utils.c
 OFILES = $(CFILES:.c=.o)
 INCLUDE_LIBFT = -L $(LIBFT_DIR) -l:$(LIBFT)
-CFLAGS = -Wall -Werror -Wextra  
+CFLAGS = -Wall -Werror -Wextra -g
 
 $(LIBNAME): $(LIBFT) $(OFILES)
 	@cp $(LIBFT) $(LIBNAME)
@@ -36,7 +36,7 @@ fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@rm -f $(OFILES) $(NAME) a.out && echo "$(NAME) cleaned.\n"
 
-re : fclean $(LIBNAME)
+re: fclean $(LIBNAME)
 
 norm:
 	@norminette | grep -E --color=always "Error" || echo "\e[32mnorminette is fine!\e[0m"
@@ -45,6 +45,6 @@ allc: $(LIBNAME) clean
 
 rec: fclean allc
 
-rerun : rec
+rerun: rec
 	@cc $(CFLAGS) SRCS/server.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o server 
 	@cc $(CFLAGS) SRCS/client.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o client 

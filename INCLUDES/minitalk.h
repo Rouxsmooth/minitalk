@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/02/19 11:09:34 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/02/21 14:03:28 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef struct s_server
 	char			*msg;
 	size_t			msglen;
 	int				maxbits;
-	int				bitcount;
 	int				has_signature;
 	int				sigcount;
 	int				len;
