@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/02/21 17:04:15 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/01 09:34:51 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (msg_sending(argv[2]) == 1)
 		return (1);
-	else
-		ft_putstr_fd("Message received by server!\n", 1);
+	//else
+	//	ft_putstr_fd("Message received by server!\n", 1);
 	return (0);
 }

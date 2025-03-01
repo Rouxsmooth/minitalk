@@ -3,7 +3,7 @@ LIBNAME = $(NAME).a
 LIBFT_DIR = ../libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFILES = SRCS/globals.c SRCS/server.c SRCS/client.c SRCS/client_utils.c SRCS/server_utils.c
+CFILES = SRCS/globals.c SRCS/client_utils.c SRCS/server_utils.c
 OFILES = $(CFILES:.c=.o)
 INCLUDE_LIBFT = -L $(LIBFT_DIR) -l:$(LIBFT)
 CFLAGS = -Wall -Werror -Wextra -g
@@ -12,6 +12,8 @@ $(LIBNAME): $(LIBFT) $(OFILES)
 	@cp $(LIBFT) $(LIBNAME)
 	@echo "All $(NAME) files compiled.\n"
 	@ar -rc $(LIBNAME) $(OFILES) $(LIBFT) 
+	@cc $(CFLAGS) SRCS/server.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o server 
+	@cc $(CFLAGS) SRCS/client.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o client 
 
 %.o: %.c 
 	@cc $(CFLAGS)  -c $< -o $@
@@ -34,7 +36,7 @@ clean:
 
 fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@rm -f $(OFILES) $(NAME) a.out && echo "$(NAME) cleaned.\n"
+	@rm -f $(OFILES) $(LIBNAME) server client && echo "$(NAME) cleaned.\n"
 
 re: fclean $(LIBNAME)
 
@@ -45,6 +47,5 @@ allc: $(LIBNAME) clean
 
 rec: fclean allc
 
-rerun: rec
-	@cc $(CFLAGS) SRCS/server.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o server 
-	@cc $(CFLAGS) SRCS/client.c -L . -l:minitalk.a $(INCLUDE_LIBFT) -o client 
+.PHONY:
+	all

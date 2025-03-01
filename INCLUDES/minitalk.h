@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/02/21 14:03:28 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/01 09:29:35 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_server
 	int				maxbits;
 	int				has_signature;
 	int				sigcount;
-	int				len;
+	unsigned int	len;
 }	t_server;
 
 typedef struct s_client
