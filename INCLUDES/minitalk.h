@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/01 09:29:35 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:07:54 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,29 @@ typedef struct s_client
 	unsigned int	current_bit;
 	unsigned char	mask;
 	unsigned int	ack;
-	int				amount_sent;
 	int				receive_sig;
 	pid_t			pid;
-	unsigned int	msglen;
+	int				resend;
+	int				retry;
 }	t_client;
 
+/* globals */
 extern t_server	g_serv;
 extern t_client	g_client;
 
-int		reception_ack(pid_t pid, int sig);
-int		sig_sending(int sig);
-int		char_sending(char c);
-int		msg_sending(char *msg);
+/* client */
+void	handle_ack(int sig);
+void	pid_error(void);
+void	sig_sending(int sig);
+void	char_sending(char c);
+void	msg_sending(char *msg);
+void	signature_sending(char *msg);
+
+/* server */
+//int		reception_ack(pid_t pid, int sig);
 void	init_g_serv(void);
 void	get_signature(void);
+int		bit_couting(int sig);
+void	set_char(void);
 
 #endif

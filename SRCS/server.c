@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/01 10:16:55 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:10:02 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ int	reception_ack(pid_t pid, int sig)
 	return (0);
 }
 
-int	bit_couting(int sig)
-{
-	g_serv.sigcount++;
-	return (sig == SIGUSR2);
-}
-
 void	handle_sigusr(int sig, siginfo_t *info, void *context)
 {
 	int		bit;
@@ -33,7 +27,6 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 	(void) context;
 	sender_pid = info->si_pid;
 	bit = bit_couting(sig);
-	reception_ack(sender_pid, sig);
 	if (g_serv.sigcount > g_serv.maxbits)
 		return (init_g_serv());
 	if (g_serv.current_bit < 8)
@@ -43,16 +36,16 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 	}
 	if (g_serv.current_bit == 8)
 	{
-		if (!g_serv.has_signature)
-			get_signature();
-		else
-			g_serv.msg[g_serv.msglen++] = g_serv.mask;
-		g_serv.current_bit = 0;
-		g_serv.mask = 0;
+		set_char();
+		if (!g_serv.len && !g_serv.has_signature)
+			return ;
 	}
+	reception_ack(sender_pid, sig);
+	//printf("len %d, has_sig %d\n", g_serv.len, g_serv.has_signature);
 	if (g_serv.sigcount == g_serv.maxbits)
-		return (ft_printf("%s\n", g_serv.msg), init_g_serv());
+		return (ft_printf("'%s'\n", g_serv.msg), init_g_serv());
 }
+// si le nombre de bits recu total est inferieur et on a (?) arrete de recevoir des signaux, on reset
 
 int	init_server(void)
 {
