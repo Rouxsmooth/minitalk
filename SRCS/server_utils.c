@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:42:43 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 17:05:53 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/02 17:22:36 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	init_g_serv(void)
 
 void	get_signature(void)
 {
-	ft_printf("mask %c\n", g_serv.mask);
 	if (g_serv.mask == 'S')
 	{
 		if (!g_serv.len)

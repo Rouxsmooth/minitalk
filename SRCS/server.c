@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 17:10:02 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/02 18:01:10 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 			return ;
 	}
 	reception_ack(sender_pid, sig);
-	//printf("len %d, has_sig %d\n", g_serv.len, g_serv.has_signature);
 	if (g_serv.sigcount == g_serv.maxbits)
-		return (ft_printf("'%s'\n", g_serv.msg), init_g_serv());
+		return (ft_printf("%s\n", g_serv.msg), init_g_serv());
+	return ;
 }
-// si le nombre de bits recu total est inferieur et on a (?) arrete de recevoir des signaux, on reset
+	//printf("len %d, has_sig %d\n", g_serv.len, g_serv.has_signature);
+
+// si le nombre de bits recu total est inferieur 
+// et qu'on a (?) arrete de recevoir des signaux, on reset
 
 int	init_server(void)
 {

@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 16:56:30 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/02 18:13:51 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void	pid_error(void)
 {
-	display_error("wrong pid");
+	if (g_client.retry)
+		display_error("wrong PID, servery probably closed.");
+	else
+		display_error("wrong PID");
 	exit(0);
 }
 
