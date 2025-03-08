@@ -6,47 +6,31 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 18:13:51 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/08 02:49:52 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
-void	pid_error(void)
+void	draw_client(void)
 {
-	if (g_client.retry)
-		display_error("wrong PID, servery probably closed.");
-	else
-		display_error("wrong PID");
-	exit(0);
-}
-
-void	sendall(char *msg)
-{
-	if (g_client.retry >= 10)
-		return (display_error("Signal definitively lost. This error can come \
-from the signature sending logic, or the server acknowledgment algorithm."),
-			(void) NULL);
-	g_client.resend = 0;
-	signature_sending(msg);
-	if (g_client.resend)
-		return (start_colored_output(1, colorcode_by_str("magenta")),
-			ft_putstr_fd("Signal lost, resending...\n", 1),
-			close_colored_output(1), g_client.retry++, sendall(msg));
-	g_client.resend = 0;
-	msg_sending(msg);
-	if (g_client.resend)
-		return (start_colored_output(1, colorcode_by_str("magenta")),
-			ft_putstr_fd("Signal lost, resending...\n", 1),
-			close_colored_output(1), g_client.retry++, sendall(msg));
-	return (start_colored_output(1, colorcode_by_str("green")),
-		ft_putstr_fd("Message received by server!\n", 1),
-		close_colored_output(1));
+	ft_printf("\e[31;1m\n\
+  +-------------------------------------------------------+\n\
+  | __  __ ___ _   _ ___ ____ _     ___ _____ _   _ _____ |\n\
+  ||  \\/  |_ _| \\ | |_ _/ ___| |   |_ _| ____| \\ | |_   _||\n\
+  || |\\/| || ||  \\| || | |   | |    | ||  _| |  \\| | | |  |\n\
+  || |  | || || |\\  || | |___| |___ | || |___| |\\  | | |  |\n\
+  ||_|  |_|___|_| \\_|___\\____|_____|___|_____|_| \\_| |_|  |\n\
+  |                                                       |\n\
+  |                  SO WE CAN COMMUNICATE                |\n\
+  +-------------------------------------------------------+\n\e[0m");
+	return ;
 }
 
 int	main(int argc, char **argv)
 {
 	struct sigaction	sa;
+	t_clientflags		flag;
 
 	sa.sa_handler = handle_ack;
 	sigemptyset(&sa.sa_mask);
@@ -54,12 +38,13 @@ int	main(int argc, char **argv)
 	if (sigaction(SIGUSR1, &sa, NULL) == -1
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 		return (display_error("failed to set up signal handlers"));
-	if (argc != 3)
-		return (display_error(ft_ternary("input should be \
-./client <PID> <MESSAGE>", "too much arguments", argc < 3)));
-	g_client.pid = ft_atoi(argv[1]);
+	init_g_client();
+	flag = has_flags(argc, argv);
+	if (!right_argcount(flag, argc))
+		return (0);
+	g_client.pid = ft_atoi(argv[1 + flag.count]);
 	if (g_client.pid < 1)
-		return (display_error("invalid server PID"));
-	sendall(argv[2]);
+		return (display_error("Invalid server PID."));
+	send(flag, argv);
 	return (0);
 }

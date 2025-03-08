@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:18:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 18:01:10 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/08 01:02:12 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,10 @@ void	handle_sigusr(int sig, siginfo_t *info, void *context)
 	}
 	reception_ack(sender_pid, sig);
 	if (g_serv.sigcount == g_serv.maxbits)
-		return (ft_printf("%s\n", g_serv.msg), init_g_serv());
+		return (ft_printf("%s", g_serv.msg), init_g_serv());
 	return ;
 }
 	//printf("len %d, has_sig %d\n", g_serv.len, g_serv.has_signature);
-
-// si le nombre de bits recu total est inferieur 
-// et qu'on a (?) arrete de recevoir des signaux, on reset
 
 int	init_server(void)
 {
@@ -62,15 +59,15 @@ int	init_server(void)
 		|| sigaction(SIGUSR2, &sa, NULL) == -1)
 		return (display_error("failed to set up signal handlers.\n"), -1);
 	return (ft_printf("\e[31;1m\n\
-   +---------------------------------------------+\n\
-   | __  __ ___ _   _ ___ _____  _    _     _  __|\n\
-   ||  \\/  |_ _| \\ | |_ _|_   _|/ \\  | |   | |/ /|\n\
-   || |\\/| || ||  \\| || |  | | / _ \\ | |   | ' / |\n\
-   || |  | || || |\\  || |  | |/ ___ \\| |___| . \\ |\n\
-   ||_|  |_|___|_| \\_|___| |_/_/   \\_\\_____|_|\\_\\|\n\
-   |                                             |\n\
-   |            SO WE CAN COMMUNICATE            |\n\
-   +---------------------------------------------+\n\n\
+  +-----------------------------------------------+\n\
+  | __  __ ___ _   _ ___ ____  _____ ______     __|\n\
+  ||  \\/  |_ _| \\ | |_ _/ ___|| ____|  _ \\ \\   / /|\n\
+  || |\\/| || ||  \\| || |\\___ \\|  _| | |_) \\ \\ / / |\n\
+  || |  | || || |\\  || | ___) | |___|  _ < \\ V /  |\n\
+  ||_|  |_|___|_| \\_|___|____/|_____|_| \\_\\ \\_/   |\n\
+  |                                             |\n\
+  |            SO WE CAN COMMUNICATE            |\n\
+  +---------------------------------------------+\n\n\
 	\e[32;1mServer's PID : %d\e[0m\n", getpid()));
 }
 

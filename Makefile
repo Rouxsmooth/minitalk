@@ -3,7 +3,8 @@ LIBNAME = $(NAME).a
 LIBFT_DIR = ../libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CFILES = SRCS/globals.c SRCS/client_utils.c SRCS/server_utils.c
+CFILES=	SRCS/globals.c			SRCS/client_utils.c	SRCS/sending.c	\
+		SRCS/sending_utils.c	SRCS/server_utils.c	SRCS/clientflags.c
 OFILES = $(CFILES:.c=.o)
 INCLUDE_LIBFT = -L $(LIBFT_DIR) -l:$(LIBFT)
 CFLAGS = -Wall -Werror -Wextra -g

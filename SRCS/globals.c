@@ -6,11 +6,11 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:13:38 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/02 16:50:53 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/07 21:21:51 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDES/minitalk.h"
 
 t_server	g_serv;
-t_client	g_client = {0, 0, 0, 0, 0, 0, 0};
+t_client	g_client;
