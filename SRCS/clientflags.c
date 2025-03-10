@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 02:48:45 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/10 14:22:44 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/10 14:23:58 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ t_clientflags	has_flags(int argc, char **argv)
 		if (!ft_strcmp(argv[1 + flag.i], "-n")
 			|| !ft_strcmp(argv[1 + flag.i], "--newline"))
 			flag.n = 1;
-		if (!ft_strcmp(argv[1 + flag.n], "-i") || !ft_strcmp(argv[1 + flag.n], "--interactive"))
+		if (!ft_strcmp(argv[1 + flag.n], "-i")
+			|| !ft_strcmp(argv[1 + flag.n], "--interactive"))
 			flag.i = 1;
 		flag.count = flag.n + flag.i;
 		if (!flag.count)
