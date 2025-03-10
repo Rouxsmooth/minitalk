@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 02:48:45 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/08 02:52:42 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/10 14:22:44 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ consecutively without line breaks.\n");
 
 int	right_argcount(t_clientflags flag, int argc)
 {
+	if (flag.h)
+		return (0);
 	if (!flag.count)
 	{
 		if (argc == 3)
@@ -48,27 +50,24 @@ int	right_argcount(t_clientflags flag, int argc)
 
 t_clientflags	has_flags(int argc, char **argv)
 {
-	static t_clientflags	flag = {0, 0, 0};
+	static t_clientflags	flag = {0, 0, 0, 0};
 
 	if (argc < 2)
 		return (display_error("Try ./client [OPTION].. [PID] [MESSAGE]"), flag);
 	if (*argv[1] == '-')
 	{
 		if (!ft_strcmp(argv[1], "-h") || !ft_strcmp(argv[1], "--help"))
-			return (help(), flag);
+			return (help(), flag.h++, flag);
 		if (argc < 3)
 			return (display_error("Too few arguments."), flag);
 		if (!ft_strcmp(argv[1], "-i") || !ft_strcmp(argv[1], "--interactive"))
-		{
 			flag.i = 1;
-			flag.count++;
-		}
-		if (!ft_strcmp(argv[1 + flag.count], "-n")
-			|| !ft_strcmp(argv[1 + flag.count], "--newline"))
-		{
+		if (!ft_strcmp(argv[1 + flag.i], "-n")
+			|| !ft_strcmp(argv[1 + flag.i], "--newline"))
 			flag.n = 1;
-			flag.count++;
-		}
+		if (!ft_strcmp(argv[1 + flag.n], "-i") || !ft_strcmp(argv[1 + flag.n], "--interactive"))
+			flag.i = 1;
+		flag.count = flag.n + flag.i;
 		if (!flag.count)
 			return (display_error("Flag not recognized. Try --help"), flag);
 	}

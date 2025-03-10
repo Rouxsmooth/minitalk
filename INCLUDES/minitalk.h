@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/08 02:50:58 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/10 13:55:47 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_clientflags
 {
 	int	i;
 	int	n;
+	int	h;
 	int	count;
 }	t_clientflags;
 
