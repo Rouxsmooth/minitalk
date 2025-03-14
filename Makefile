@@ -1,6 +1,6 @@
 NAME = minitalk
 LIBNAME = $(NAME).a
-LIBFT_DIR = ../libft
+LIBFT_DIR = INCLUDES/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 CFILES=	SRCS/globals.c			SRCS/client_utils.c	SRCS/sending.c	\
@@ -33,11 +33,11 @@ all: $(LIBNAME)
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@rm -f $(OFILES) tester && echo "$(NAME) object files cleaned."
+	@rm -f $(OFILES) tester test && echo "$(NAME) object files cleaned."
 
 fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@rm -f $(OFILES) $(LIBNAME) server client tester && echo "$(NAME) cleaned.\n"
+	@rm -f $(OFILES) $(LIBNAME) server client tester test && echo "$(NAME) cleaned.\n"
 
 re: fclean $(LIBNAME)
 
