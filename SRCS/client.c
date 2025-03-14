@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:26:19 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/10 14:09:58 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/14 18:07:18 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main(int argc, char **argv)
 	flag = has_flags(argc, argv);
 	if (!right_argcount(flag, argc))
 		return (0);
-	ft_printf("flag.count %d pot_pid '%s'\n", flag.count, argv[1 + flag.count]);
 	g_client.pid = ft_atoi(argv[1 + flag.count]);
 	if (g_client.pid < 1)
 		return (display_error("Invalid server PID."));

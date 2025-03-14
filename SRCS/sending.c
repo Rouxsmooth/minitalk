@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 10:36:31 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/08 02:45:27 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/14 17:42:41 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	sig_sending(int sig)
 	g_client.ack = 0;
 	if (kill(g_client.pid, (sig * 2) + 10) == -1)
 		pid_error();
-	usleep(25);
+	usleep(1);
 	while (!g_client.ack && i++ <= 500)
-		usleep(25);
+		usleep(1);
 	if (i > 500)
 		g_client.resend = 1;
 	return ;
