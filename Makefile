@@ -33,11 +33,11 @@ all: $(LIBNAME)
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@rm -f $(OFILES) a.out && echo "$(NAME) object files cleaned."
+	@rm -f $(OFILES) tester && echo "$(NAME) object files cleaned."
 
 fclean:
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@rm -f $(OFILES) $(LIBNAME) server client && echo "$(NAME) cleaned.\n"
+	@rm -f $(OFILES) $(LIBNAME) server client tester && echo "$(NAME) cleaned.\n"
 
 re: fclean $(LIBNAME)
 
@@ -48,5 +48,9 @@ allc: $(LIBNAME) clean
 
 rec: fclean allc
 
+#for i in {1..X} ; do ./client -n PID test$i ; done ;
+tester :
+	@cc $(CFLAGS) SRCS/error_tester.c -o tester $(INCLUDE_LIBFT) && ./tester && rm -f tester
+
 .PHONY:
-	all
+	all tester
