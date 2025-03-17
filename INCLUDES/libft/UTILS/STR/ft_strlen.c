@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 19:56:28 by m.zaian           #+#    #+#             */
-/*   Updated: 2025/01/28 00:43:37 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/17 01:17:45 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
+	if (!str)
+		return (0);
 	i = 0;
-	while (str && str[i])
+	while (str[i])
 		i++;
 	return (i);
 }

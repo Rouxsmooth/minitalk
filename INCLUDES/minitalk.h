@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:06:57 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/10 13:55:47 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/17 00:56:13 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 
 # include <sys/types.h>
 # include <signal.h>
-
-//add libft to INCLUDES and change libft.h path
-#include "../../libft/INCLUDES/libft.h"
+# include "libft/INCLUDES/libft.h"
 
 typedef struct s_server
 {

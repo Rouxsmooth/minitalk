@@ -6,7 +6,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CFILES=	SRCS/globals.c			SRCS/client_utils.c	SRCS/sending.c	\
 		SRCS/sending_utils.c	SRCS/server_utils.c	SRCS/clientflags.c
 OFILES = $(CFILES:.c=.o)
-INCLUDE_LIBFT = -L $(LIBFT_DIR) -l:$(LIBFT)
+INCLUDE_LIBFT = -L . -l:$(LIBFT)
 CFLAGS = -Wall -Werror -Wextra -g
 
 $(LIBNAME): $(LIBFT) $(OFILES)
@@ -53,4 +53,4 @@ tester :
 	@cc $(CFLAGS) SRCS/error_tester.c -o tester $(INCLUDE_LIBFT) && ./tester && rm -f tester
 
 .PHONY:
-	all tester
+	all re tester

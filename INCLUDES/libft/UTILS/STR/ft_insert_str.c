@@ -6,7 +6,7 @@
 /*   By: mzaian <mzaian@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 10:56:46 by mzaian            #+#    #+#             */
-/*   Updated: 2025/03/10 15:23:36 by mzaian           ###   ########.fr       */
+/*   Updated: 2025/03/17 01:12:24 by mzaian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	ft_insert_str(char **dest, char *src, int index)
 		return (-1);
 	ft_strcat(newdest, src);
 	newdestlen = ft_strcat(newdest, end);
-	ft_del(dest);
+	ft_del(*dest);
 	*dest = newdest;
-	return (ft_del(&end), newdestlen);
+	return (ft_del(end), newdestlen);
 }
